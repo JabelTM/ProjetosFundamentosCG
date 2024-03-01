@@ -1,1 +1,1 @@
-!(print.jpg)
+![](print.jpg)

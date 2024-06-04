@@ -1,4 +1,4 @@
-# 3d-cubes
+# 3d-obj
 
 ### Por Jabel Tiago Martins
 

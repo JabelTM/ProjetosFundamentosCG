@@ -2,4 +2,4 @@
 
 ### Por Jabel Tiago Martins
 
-<img src="./video_3d_cubes" width="100%">
+<img src="./video_3d_cubes.gif" width="100%">

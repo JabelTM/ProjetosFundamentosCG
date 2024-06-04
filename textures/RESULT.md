@@ -1,4 +1,4 @@
-# 3d-cubes
+# textures
 
 ### Por Jabel Tiago Martins
 

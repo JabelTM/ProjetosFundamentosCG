@@ -52,5 +52,6 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "C:/projetos/c++/PG_Projetos_Aulas/Dependencies/glm"
 }

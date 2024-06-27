@@ -15,6 +15,7 @@
                 "${workspaceFolder}/Common/src/glad.c",
                 "${workspaceFolder}/Common/src/stb_image.cpp",
                 "${workspaceFolder}/Common/src/camera.cpp",
+                "${workspaceFolder}/Common/src/Sprite.cpp",
                 "-lstdc++",
                 "-o",
                 "${workspaceFolder}\\Common\\out\\${fileBasenameNoExtension}.exe",

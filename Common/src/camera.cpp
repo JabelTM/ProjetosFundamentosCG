@@ -22,30 +22,38 @@ void Camera::initialize(Shader* shader, int width, int height, float sensitivity
 
 void Camera::rotate(GLFWwindow* window, double xpos, double ypos)
 {
-	if (firstMouse)
-	{
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
-	}
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
 
-	float offsetx = xpos - lastX;
-	float offsety = lastY - ypos;
+    float offsetx = xpos - lastX;
+    float offsety = lastY - ypos;
 
-	lastX = xpos;
-	lastY = ypos;
+    lastX = xpos;
+    lastY = ypos;
 
-	offsetx *= sensitivity;
-	offsety *= sensitivity;
+    // Aplica suavização
+    float dampingFactor = 0.1f; // Você pode ajustar esse valor para controlar a suavização
+    offsetx *= sensitivity * dampingFactor;
+    offsety *= sensitivity * dampingFactor;
 
-	pitch += offsety;
-	yaw += offsetx;
+    pitch += offsety;
+    yaw += offsetx;
 
-	glm::vec3 front;
-	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front.y = sin(glm::radians(pitch));
-	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	cameraFront = glm::normalize(front);
+    // Limita o valor do pitch para evitar que a câmera vire de cabeça para baixo
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 front;
+    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    front.y = sin(glm::radians(pitch));
+    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(front);
 }
 
 void Camera::update() {

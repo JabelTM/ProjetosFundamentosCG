@@ -3,7 +3,7 @@
 Sprite::Sprite(std::vector<GLuint> texIDs, vec3 pos, vec3 scale, Shader* shader, float speed, float ang, bool mirrored)
     : texIDs(texIDs), pos(pos), scale(scale), shader(shader), speed(speed), ang(ang), isMirrored(mirrored),
       isMoving(false), canJump(false), isJumping(false), currentFrame(0), frameTime(0.1f), jumpFrameTime(1.0f), timeAccumulator(0.0f),
-      jumpSpeed(1.0f), jumpHeight(100.0f), jumpOrigin(pos.y)
+      jumpSpeed(1.0f), jumpHeight(100.0f), jumpOrigin(pos.y), isMovingTo(false)
 {
     this->pos = pos;
     this->scale = scale;
@@ -148,6 +148,11 @@ void Sprite::update(float deltaTime)
     if (isJumping) {
         updateJump(deltaTime);
     }
+
+    if (isMovingTo) {
+        updatePosition();
+    }
+    
 	
     // Aplica transformações de rotação, escala e espelhamento
     if (isMirrored) {
@@ -165,10 +170,37 @@ void Sprite::update(float deltaTime)
     updateTexture(deltaTime);
 }
 
+void Sprite::updatePosition() {
+    if (pos.x == targetPosition.x && pos.y == targetPosition.y) {
+        isMovingTo = false;
+        return;
+    }
+
+    if (pos.x < targetPosition.x && pos.x + speed < targetPosition.x) {
+        pos.x += speed;
+    } else if (pos.x > targetPosition.x && pos.x - speed > targetPosition.x) {
+        pos.x -=speed;
+    } else {
+        pos.x = targetPosition.x;
+    }
+
+    if (pos.y < targetPosition.y && pos.y + speed < targetPosition.y) {
+        pos.y += speed;
+    } else if (pos.y > targetPosition.y && pos.y - speed > targetPosition.y) {
+        pos.y -=speed;
+    } else {
+        pos.y = targetPosition.y;
+    }
+    
+    if (pos.x == targetPosition.x && pos.y == targetPosition.y) {
+        currentFrame = 0;
+    }
+}
+
 void Sprite::updateTexture(float deltaTime)
 {
     // Lógica de animação da textura
-    if (isMoving && !isJumping) {
+    if ((isMoving && !isJumping) || isMovingTo) {
         timeAccumulator += deltaTime;
         if (timeAccumulator >= frameTime) {
             timeAccumulator -= frameTime;
@@ -205,4 +237,32 @@ void Sprite::updateJump(float deltaTime)
 		isJumping = false;
 		currentFrame = 0;
     }
+}
+
+bool Sprite::getMirrored() {
+    return isMirrored;
+}
+
+void Sprite::moveTo(vec3 targetPosition, bool mirror) { 
+    mirrorIt(mirror);
+    float adjustX = 4.0f;
+    if (mirror)
+        adjustX = 2.2f;
+    
+    this->isMovingTo = true;
+
+    this->targetPosition = vec3(targetPosition.x + (scale.x / adjustX), targetPosition.y - (scale.y / 4.0f), targetPosition.z);
+}
+
+void Sprite::staticMoveTo(vec3 targetPosition, bool mirror) {
+    mirrorIt(mirror);
+    float adjustX = 4.0f;
+    if (mirror)
+        adjustX = 2.2f;
+    
+    this->pos = vec3(targetPosition.x + (scale.x / adjustX), targetPosition.y - (scale.y / 4.0f), targetPosition.z);
+}
+
+bool Sprite::getIsMovingTo() {
+    return this->isMovingTo;
 }

@@ -1,18 +1,8 @@
+#include "Shader.h"
 #include <glm/glm.hpp> 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
-
-#include "Shader.h"
-
-using namespace glm;
-
-#include <glm/glm.hpp> 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <vector>
-
-#include "Shader.h"
 
 using namespace glm;
 
@@ -37,16 +27,23 @@ public:
     void setJumpTextures(std::vector<GLuint> texIDs);
     void update(float deltaTime);
 
+    void moveTo(vec3 targetPosition, bool mirror);
+    void staticMoveTo(vec3 targetPosition, bool mirror);
+    bool getMirrored();
+    bool getIsMovingTo();
+
 private:
     std::vector<GLuint> texIDs;
     GLuint VAO;
     vec3 pos;
     vec3 scale;
+    vec3 targetPosition;
     Shader* shader;
     float speed;
     float ang;
     bool isMirrored;
     bool isMoving;
+    bool isMovingTo;
     bool canJump;  // Indica se o pulo está habilitado
     bool isJumping;
     bool isGoingUp;
@@ -63,5 +60,6 @@ private:
 
     void updateTexture(float deltaTime);
     void updateJump(float deltaTime);
+    void updatePosition();
 };
 

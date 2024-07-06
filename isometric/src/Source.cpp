@@ -44,8 +44,6 @@ int main()
 
 	// Compilando e buildando o programa de shader
 	Shader shader("../shaders/tex.vs", "../shaders/tex.fs");
-	
-	GLuint knightTexID = loadTexture("../assets/player.png", 2);
 
 	//Ativando o buffer de textura 0 da opengl
 	glActiveTexture(GL_TEXTURE0);
@@ -69,7 +67,15 @@ int main()
 	GLuint knightWalk4TexID = loadTexture("../assets/knight/walk5.png", 6);
 	GLuint knightWalk5TexID = loadTexture("../assets/knight/walk6.png", 7);
 
-    map = new Tilemap("../assets/terrain.png", "map.txt", &shader, vec3(512.0f, 386.0f, 0.0f));
+	GLuint iten1TexID = loadTexture("../assets/itens/sword.png", 8);
+	GLuint iten2TexID = loadTexture("../assets/itens/trunk.png", 9);
+	GLuint iten3TexID = loadTexture("../assets/itens/spyglass.png", 10);
+
+    map = new Tilemap("../assets/terrain.png",
+	 					"map.txt",
+	  					&shader,
+	   					vec3(512.0f, 386.0f, 0.0f),
+	    				{iten1TexID, iten2TexID, iten3TexID});
 
 	knight = new Sprite({knightStopTexID, knightWalk1TexID, knightWalk2TexID,
 	   							knightWalk3TexID, knightWalk4TexID, knightWalk5TexID},
@@ -211,7 +217,7 @@ GLuint loadTexture(string texturePath, int id)
 	}
 	else
 	{
-		std::cout << "Failed to load texture" << std::endl;
+		std::cout << "Failed to load texture " << texturePath << std::endl;
 	}
 
 	stbi_image_free(data);

@@ -10,7 +10,7 @@ using namespace std;
 
 class Tilemap {
 public:
-    Tilemap(string texturePath, string configPath, Shader* shader, vec3 viewportCenter);
+    Tilemap(string texturePath, string configPath, Shader* shader, vec3 viewportCenter, vector<GLuint> itens);
     ~Tilemap();
 
     void draw();
@@ -33,6 +33,7 @@ private:
     GLuint loadTexture(string texturePath);
 
     GLuint textureID;
+    vector<GLuint> itens;
     int tilesX, tilesY, texTilesX, texTilesY;
     float tileWidth, tileHeight;
     vector<Tile*> tiles;

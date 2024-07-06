@@ -8,8 +8,8 @@
 
 using namespace glm;
 
-Tilemap::Tilemap(string texturePath, string configPath, Shader* shader, vec3 viewportCenter):
- shader(shader), viewportCenter(viewportCenter), selectedTile(viewportCenter) {
+Tilemap::Tilemap(string texturePath, string configPath, Shader* shader, vec3 viewportCenter, vector<GLuint> itens):
+ shader(shader), viewportCenter(viewportCenter), selectedTile(viewportCenter), itens(itens) {
     textureID = loadTexture(texturePath);
     loadConfig(configPath);
 }
@@ -39,6 +39,13 @@ void Tilemap::loadConfig(string configPath) {
     iss.str(line);
     iss >> tileWidth >> tileHeight;
 
+    int itenWidth, itenHeight;
+
+    getline(file, line);
+    iss.clear();
+    iss.str(line);
+    iss >> itenWidth >> itenHeight;
+
     getline(file, line);
     iss.clear();
     iss.str(line);
@@ -52,8 +59,8 @@ void Tilemap::loadConfig(string configPath) {
     while (getline(file, line)) {
         iss.clear();
         iss.str(line);
-        int posX, posY, intCanSelect;
-        iss >> posX >> posY >> intCanSelect;
+        int posX, posY, intCanSelect, intHasIten, intItenTex;
+        iss >> posX >> posY >> intCanSelect >> intHasIten >> intItenTex;;
 
         float texPosX = tileSizeX * posX;
         float texPosY = tileSizeY * posY;
@@ -71,13 +78,22 @@ void Tilemap::loadConfig(string configPath) {
         float ang = 0.0f;
 
         bool canSelect = false;
+        bool hasIten = false;
 
         if (intCanSelect == 0) {
             canSelect = true;
         }
         
+        if (intHasIten == 1) {
+            hasIten = true;
+        }
 
-        tiles.push_back(new Tile(textureID, texPosX, texPosY, tileSizeX, tileSizeY, tilePos, scale, shader, ang, canSelect));
+        tiles.push_back(
+            new Tile(textureID, texPosX, texPosY,
+             tileSizeX, tileSizeY, tilePos,
+              scale, shader, ang, canSelect,
+               hasIten, itens[intItenTex], 
+               vec3(static_cast<float>(itenWidth), static_cast<float>(itenHeight), 0.0f)));
 
         if (++x >= tilesX) {
             x = 0;
